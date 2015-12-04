@@ -1,0 +1,96 @@
+
+<script src="/assets/amazeui.min.js"></script>
+<div class="admin-content">
+
+
+  <div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>设备管理</small></div>
+  </div>
+
+
+  <div class="am-g">
+    <div class="am-u-md-6 am-cf">
+      <div class="am-fl am-cf">
+        <div class="am-btn-toolbar am-fl">
+          <div class="am-btn-group am-btn-group-xs">
+            <a href="/equipment/new" type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</a>
+
+            <!--<button type="button" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>-->
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="am-u-md-3 am-cf">
+      <div class="am-fr">
+        <div class="am-input-group am-input-group-sm">
+          <input type="text" class="am-form-field">
+                <span class="am-input-group-btn">
+                  <button class="am-btn am-btn-default" type="button">搜索</button>
+                </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="am-g">
+    <div class="am-u-sm-12">
+      <form class="am-form">
+        <table class="am-table am-table-striped am-table-hover table-main">
+          <thead>
+          <tr>
+            <th class="table-check"><input type="checkbox" /></th><th class="table-id">ID</th><th class="table-title">实验室名</th><th class="table-type">位置</th>
+
+            <th class="table-set">操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @labs.each do |e| %>
+              <tr>
+                <td><input id="<%=e.id %>" type="checkbox" /></td>
+                <td ><%=e.id %></td>
+                <td><a href="/lab/profile/<%=e.id %>"><%=e.name %></a></td>
+                <td><%=e.position  %></td>
+
+
+
+
+
+
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <a  style="background: white" href="/lab/<%=e.id %>/edit" class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</a>
+
+                      <%= link_to content_tag(:span,  "删除", :class=>'am-icon-trash-o'),
+                                  {:controller => "lab", :action => "delete", :id => e.id} ,
+                                  :class => 'am-btn am-btn-default am-btn-xs am-text-danger',
+                                  :style => 'background:white',
+                                  :type =>'button',
+                                  :data=>{:confirm=>'确认删除?'}
+                      %>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+          <% end %>
+
+
+          </tbody>
+        </table>
+        <div class="am-fr">
+          <%= paginate @labs %>
+        </div>
+
+
+        <hr />
+        <p>注：只有最高管理员才可以进行删除操作</p>
+      </form>
+    </div>
+
+  </div>
+
+
+
+</div>

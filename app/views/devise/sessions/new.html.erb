@@ -1,0 +1,41 @@
+<div class="admin-content" style="min-height: 600px">
+
+<div class="devise-panel" style=" float:right;min-width:300px;max-width: 555px ;margin-top: 100px;margin-right: 100px">
+<h2>欢迎使用本系统</h2>
+
+<%= form_for(resource, as: resource_name,  url: session_path(resource_name),:html=>{ :class=>'am-form'}) do |f| %>
+
+      <% flash.each do |key, value| %>
+          <%if key!="notice" %>
+              <div class="am-alert am-alert-danger" data-am-alert>
+                <button type="button" class="am-close">&times;</button>
+                用户名或密码错误
+              </div>
+          <%end %>
+      <% end %>
+  <div class="field">
+    <%= f.label :邮箱 %><br />
+    <%= f.email_field :email, autofocus: true ,:id => 'doc-ipt-pwd-1'%>
+  </div>
+
+  <div class="field">
+    <%= f.label :密码 %><br />
+    <%= f.password_field :password, autocomplete: "off" ,:id => 'doc-ipt-pwd-1'%>
+  </div>
+
+  <% if devise_mapping.rememberable? -%>
+    <div class="am-radio">
+      <%= f.check_box :remember_me %>
+      <%= f.label :记住我%>
+    </div>
+  <% end -%>
+
+  <div class="actions">
+    <%= f.submit "登陆" ,:class=>"am-btn am-btn-primary am-btn-sm" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+</div>
+
+</div>

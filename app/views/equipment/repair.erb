@@ -1,0 +1,159 @@
+
+<script src="/assets/amazeui.min.js"></script>
+<div class="admin-content">
+
+
+  <div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>设备管理</small></div>
+  </div>
+
+
+  <div class="am-g">
+    <div class="am-u-md-6 am-cf">
+      <div class="am-fl am-cf">
+        <div class="am-btn-toolbar am-fl">
+          <div class="am-btn-group am-btn-group-xs">
+            <button type="button" id="doc-prompt-toggle" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</button>
+
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="am-u-md-3 am-cf">
+      <div class="am-fr">
+        <div class="am-input-group am-input-group-sm">
+          <input type="text" class="am-form-field">
+                <span class="am-input-group-btn">
+                  <button class="am-btn am-btn-default" type="button">搜索</button>
+                </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="am-g">
+    <div class="am-u-sm-12">
+      <form class="am-form">
+        <table class="am-table am-table-striped am-table-hover table-main">
+          <thead>
+          <tr>
+            <th class="table-check"><input type="checkbox" /></th><th class="table-id">ID</th><th class="table-title">设备名</th><th class="table-type">价值</th><th class="table-author">添加人</th><th class="table-date">入库日期</th><th class="table-type">状态</th><th class="table-set">操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @equipments.each do |e| %>
+              <tr>
+                <td><input id="<%=e.id %>" type="checkbox" /></td>
+                <td ><%=e.id %></td>
+                <td><a href="#"><%=e.equipment_name %></a></td>
+                <td><%=e.price  %></td>
+                <td><%=e.post_user_name %></td>
+                <td><% @format="%Y-%m-%d %H:%M:%S" %><%=e.created_at.localtime.strftime(@format) %></td>
+                <td><%if e.is_repairing==true %>
+                  正在维修
+                      <%else%>
+                  尚未报修
+                  <%end%>
+                      </td>
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <%= link_to content_tag(:span,  "报修", :class=>'am-icon-pencil-square-o'),
+                                  {:controller => "equipment", :action => "add_repair_report", :id => e.id} ,
+                                  :class => 'am-btn am-btn-default am-btn-xs am-text-secondaryr',
+                                  :style => 'background:white',
+                                  :type =>'button',
+                                  :data => {:confirm => '确定报修?'}
+                      %>
+                      <%= link_to content_tag(:span,  "已恢复", :class=>'am-icon-trash-o'),
+                                  {:controller => "equipment", :action => "complete_repair", :id => e.id} ,
+                                  :class => 'am-btn am-btn-default am-btn-xs am-text-danger',
+                                  :style => 'background:white',
+                                  :type =>'button',
+                                  :data => {:confirm => '确定已修复?'}
+                      %>
+
+                    </div>
+                  </div>
+                </td>
+              </tr>
+          <% end %>
+
+
+          </tbody>
+        </table>
+        <div class="am-fr">
+          <%= paginate @equipments %>
+        </div>
+
+
+        <hr />
+        <p>注：.....</p>
+      </form>
+    </div>
+
+  </div>
+  <div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
+    <div class="am-modal-dialog">
+      <div class="am-modal-hd">添加维修设备</div>
+      <div class="am-modal-bd">
+        请输入编号
+        <input type="text" class="am-modal-prompt-input">
+      </div>
+
+      <div class="am-modal-footer">
+        <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+        <span class="am-modal-btn" data-am-modal-confirm>提交</span>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+
+    $(function() {
+        $('#doc-prompt-toggle').on('click', function() {
+            $('#my-prompt').modal({
+                relatedTarget: this,
+                onConfirm: function(e) {
+                    $.ajax({
+                        type:"get",
+                        url:'/equipment/add_repair',
+
+                        data:{"id": e.data},
+
+                        success:function(data){
+
+                            alert(data.message);
+                            window.location.reload();
+
+                        }
+
+
+                    })
+
+
+
+
+                },
+                onCancel: function(e) {
+
+                }
+            });
+        });
+    });
+    function confirm_delete(id){
+
+
+        if(confirm("确定删除吗")){
+
+            window.location.href="/equipment/"+id+"/delete"
+        }
+    }
+
+</script>

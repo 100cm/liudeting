@@ -1,0 +1,183 @@
+
+<script src="/assets/amazeui.min.js"></script>
+<script>
+    $(function() {
+        var $form = $('#doc-vld-msg');
+        var $tooltip = $('<div id="vld-tooltip">提示信息！</div>');
+        $tooltip.appendTo(document.body);
+
+        $form.validator();
+
+        var validator = $form.data('amui.validator');
+
+        $form.on('focusin focusout', '.am-form-error input', function(e) {
+            if (e.type == 'focusin') {
+                var $this = $(this);
+                var offset = $this.offset();
+                var msg = $this.data('foolishMsg') || validator.getValidationMessage($this.data('validity'));
+
+                $tooltip.text(msg).show().css({
+                    left: offset.left + 236,
+                    top: offset.top + $(this).outerHeight() + 10
+                });
+            } else {
+                $tooltip.hide();
+            }
+        });
+    });
+
+    //下面用于图片上传预览功能
+    function setImagePreview(avalue) {
+        var docObj=document.getElementById("doc");
+
+        var imgObjPreview=document.getElementById("preview");
+        if(docObj.files &&docObj.files[0])
+        {
+//火狐下，直接设img属性
+            imgObjPreview.style.display = 'block';
+            imgObjPreview.style.width = '150px';
+            imgObjPreview.style.height = '180px';
+//imgObjPreview.src = docObj.files[0].getAsDataURL();
+
+//火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
+            imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+        }
+        else
+        {
+//IE下，使用滤镜
+            docObj.select();
+            var imgSrc = document.selection.createRange().text;
+            var localImagId = document.getElementById("localImag");
+//必须设置初始大小
+            localImagId.style.width = "150px";
+            localImagId.style.height = "180px";
+//图片异常的捕捉，防止用户修改后缀来伪造图片
+            try{
+                localImagId.style.filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+            }
+            catch(e)
+            {
+                alert("您上传的图片格式不正确，请重新选择!");
+                return false;
+            }
+            imgObjPreview.style.display = 'none';
+            document.selection.empty();
+        }
+        return true;
+    }
+
+</script>
+
+<style>
+    #vld-tooltip {
+        position: absolute;
+
+        padding: 5px 10px;
+        background: #F37B1D;
+        min-width: 150px;
+        color: #fff;
+        transition: all 0.15s;
+        box-shadow: 0 0 5px rgba(0,0,0,.15);
+        display: none;
+    }
+
+    #vld-tooltip:before {
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        width: 0;
+        height: 0;
+        margin-left: -8px;
+        content: "";
+        border-width: 0 8px 8px;
+        border-color: transparent transparent #F37B1D;
+        border-style: none inset solid;
+    }
+    .am-form{
+
+        max-width: 1100px;
+        margin: 0px auto;
+    }
+</style>
+<div class="admin-content">
+
+
+
+  <div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>设备管理</small></div>
+  </div>
+  <form action="/equipment/<%=@equipment.id %>/update"  method="get"  class="am-form" id="doc-vld-msg" >
+    <fieldset>
+      <legend>修改设备 </legend> <p style="color: red"><%= @info %></p>
+      <div class="am-form-group">
+        <label for="doc-vld-name-2-1">设备图片：</label>
+        <img id="preview"
+             <%if !@equipment.avatar.nil? %>
+             src="<%=@equipment.avatar %>"
+             <% else %>
+              src="/assets/unknow.jpg"
+             <%end%> width="150" height="180" style="display: block; width: 150px; height: 180px;">
+        <input type="file" name="file" id="doc"  style="width:150px;" onchange="javascript:setImagePreview();">
+      </div>
+      <div class="am-form-group">
+        <label for="doc-vld-name-2-1">设备名字：</label>
+        <input type="text" id="doc-vld-name-2-1" minlength="1"  ata-foolish-msg="输入名字" name="equipment[equipment_name]" value="<%=@equipment.equipment_name %>" required/>
+      </div>
+
+      <div class="am-form-group">
+        <label for="doc-vld-name-2-1">设备数量：</label>
+        <input type="text" id="doc-vld-name-2-1" minlength="1"  ata-foolish-msg="输入名字" name="equipment[count]"    value="<%=@equipment.count %>" required/>
+      </div>
+
+      <div class="am-form-group">
+        <label for="doc-vld-email-2-1">设备价值：</label>
+        <input type="text" id="doc-vld-email-2-1" minlength="1" ata-foolish-msg="输入价值"  name="equipment[price]" value="<%=@equipment.price %>" required/>
+      </div>
+
+
+
+
+
+      <div class="am-form-group">
+        <label>设备级别： </label>
+        <label class="am-radio-inline">
+          <input type="radio"  value="低" name="equipment[level]"  <%if @equipment.level=="低" %>checked <%end%> > 低
+        </label>
+        <label class="am-radio-inline">
+          <input type="radio" value="中" name="equipment[level]" <%if @equipment.level=="中" %>checked <%end%>> 中
+        </label>
+        <label class="am-radio-inline">
+          <input type="radio" value="高" name="equipment[level]" <%if @equipment.level=="高" %>checked <%end%>> 高
+        </label>
+      </div>
+
+      <div class="am-form-group">
+        <label>完整度： </label>
+        <label class="am-radio-inline">
+          <input type="radio"  value="true" name="equipment[is_damaged]" <%if @equipment.is_damaged==true %>checked <%end%>> 损坏
+        </label>
+        <label class="am-radio-inline">
+          <input type="radio" value="false" name="equipment[is_damaged]" <%if @equipment.is_damaged==false %>checked <%end%>> 完好
+        </label>
+
+      </div>
+
+
+
+
+      <div class="am-form-group">
+        <label for="doc-vld-ta-2-1">其他信息：</label>
+        <textarea  value="" style="height: 167px" id="doc-vld-ta-2-1"  name="equipment[equipment_info]" minlength="10" maxlength="100"><%= @equipment.equipment_info %></textarea>
+      </div>
+
+      <button class="am-btn am-btn-secondary" type="submit">提交</button>
+    </fieldset>
+  </form>
+
+
+
+</div>
+
+
+

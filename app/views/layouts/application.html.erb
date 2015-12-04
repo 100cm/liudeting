@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LabManage</title>
+  <%= javascript_include_tag "application" %>
+
+  <script src="/assets/amazeui.min.js"></script>
+<script src="/assets/main.js"></script>
+  <link rel="stylesheet" href="/assets/amazeui.css"/>
+  <link rel="stylesheet" href="/assets/admin.css">
+<link rel="stylesheet" href="/assets/main.css">
+
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<header class="am-topbar admin-header">
+  <div class="am-topbar-brand">
+    <strong>江苏师范大学</strong> <small>实验室管理系统</small>
+  </div>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+  <%if current_user.nil? %>
+
+  <%else %>
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+    <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+      <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          <span class="am-icon-users"></span> <%= current_user.username %> <span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+          <li><a href="#"><span class="am-icon-user"></span> 资料</a></li>
+
+
+          <li><%= link_to content_tag(:span,  "退出", :class=>'am-icon-power-off'),destroy_user_session_path,:method => :delete,:class => "btn btn-block btn-default" %></li>
+        </ul>
+      </li>
+      <li><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+    </ul>
+  </div>
+
+      <%end %>
+</header>
+
+<%if current_user.nil? %>
+
+<%else %>
+<div class="am-cf admin-main" style="">
+  <!-- sidebar start -->
+  <div class="admin-sidebar">
+    <ul class="am-list admin-sidebar-list">
+      <li><a href="/"><span class="am-icon-home"></span> 首页</a></li>
+      <li class="admin-parent">
+        <a class="am-cf  <% if params[:controller] != "equipment" %> am-collapsed<%end %>" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-file"></span> 器材管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub <% if params[:controller] == "equipment" %> am-in<%end %>" id="collapse-nav">
+          <li><a href="/equipment/new" class="am-cf"><span class="am-icon-check"></span> 器材入库<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+          <li><a href="/equipment/show"><span class="am-icon-tasks"></span> 查询全部器材</a></li>
+          <li><a href="/equipment/apply"><span class="am-icon-puzzle-piece"></span> 器材借取</a></li>
+          <li><a href="/equipment/revert"><span class="am-icon-th"></span> 器材归还<span class="am-badge am-badge-secondary am-margin-right am-fr">24</span></a></li>
+          <li><a href="/equipment/repair"><span class="am-icon-calendar"></span> 器材维修</a></li>
+          <!--<li><a href="admin-404.html"><span class="am-icon-bug"></span> 总体日志</a></li>-->
+        </ul>
+      </li>
+
+      <li class="admin-parent">
+        <a class="am-cf" data-am-collapse="{target: '#collapse-nav-2'}"><span class="am-icon-table"></span> 实验室管理<span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+        <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav-2">
+          <li><a href="/lab/new" class="am-cf"><span class="am-icon-check"></span> 实验室新增<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+          <li><a href="/lab/show"><span class="am-icon-tasks"></span> 实验室查看</a></li>
+
+          <!--<li><a href="admin-404.html"><span class="am-icon-bug"></span> 总体日志</a></li>-->
+        </ul>
+      </li>
+
+      <li><a href="/manage/apply"><span class="am-icon-pencil-square-o"></span> 申请管理</a></li>
+      <li><a href="/user/my_apply"><span class="am-icon-pencil-square-o"></span> 我的申请</a></li>
+      <li><a href="/users/edit"><span class="am-icon-sign-out"></span> 修改资料</a></li>
+    </ul>
+
+    <div class="am-panel am-panel-default admin-sidebar-panel">
+      <div class="am-panel-bd">
+        <p><span class="am-icon-bookmark"></span> 公告</p>
+        <p>时光静好，与君语；细水流年，与君同。—— 刘德婷</p>
+      </div>
+    </div>
+
+    <div class="am-panel am-panel-default admin-sidebar-panel">
+      <div class="am-panel-bd">
+        <p><span class="am-icon-tag"></span> 刘德婷</p>
+        <p>欢迎来到实验管理系统</p>
+      </div>
+    </div>
+  </div>
+  <!-- sidebar end -->
+<%end%>
+
+  <!-- content start -->
+
+
+<%= yield%>
+
+
+</div>
+  <!-- content end -->
+
+</div>
+
+<footer >
+  <hr>
+  <p class="am-padding-left">© 2016 powered  by  ruby on rails   <a href="＃" target="_blank">刘德婷</a></p>
+</footer>
+
+
+
+
+</body>
+</html>

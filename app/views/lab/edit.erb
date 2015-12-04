@@ -1,0 +1,102 @@
+
+<script src="/assets/amazeui.min.js"></script>
+<script>
+    $(function() {
+        var $form = $('#doc-vld-msg');
+        var $tooltip = $('<div id="vld-tooltip">提示信息！</div>');
+        $tooltip.appendTo(document.body);
+
+        $form.validator();
+
+        var validator = $form.data('amui.validator');
+
+        $form.on('focusin focusout', '.am-form-error input', function(e) {
+            if (e.type == 'focusin') {
+                var $this = $(this);
+                var offset = $this.offset();
+                var msg = $this.data('foolishMsg') || validator.getValidationMessage($this.data('validity'));
+
+                $tooltip.text(msg).show().css({
+                    left: offset.left + 236,
+                    top: offset.top + $(this).outerHeight() + 10
+                });
+            } else {
+                $tooltip.hide();
+            }
+        });
+    });
+</script>
+
+<style>
+    #vld-tooltip {
+        position: absolute;
+
+        padding: 5px 10px;
+        background: #F37B1D;
+        min-width: 150px;
+        color: #fff;
+        transition: all 0.15s;
+        box-shadow: 0 0 5px rgba(0,0,0,.15);
+        display: none;
+    }
+
+    #vld-tooltip:before {
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        width: 0;
+        height: 0;
+        margin-left: -8px;
+        content: "";
+        border-width: 0 8px 8px;
+        border-color: transparent transparent #F37B1D;
+        border-style: none inset solid;
+    }
+    .am-form{
+
+        max-width: 1100px;
+        margin: 0px auto;
+    }
+</style>
+<div class="admin-content">
+
+
+
+  <div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>实验室管理</small></div>
+  </div>
+  <form action="/lab/<%=@lab.id %>/update"  method="get"  class="am-form" id="doc-vld-msg" >
+    <fieldset>
+      <legend>添加实验室 </legend> <p style="color: red"><%= @info %></p>
+      <div class="am-form-group">
+        <label for="doc-vld-name-2-1">实验室名字：</label>
+        <input type="text" id="doc-vld-name-2-1" minlength="1"  value="<%=@lab.name %>" ata-foolish-msg="输入名字" name="lab[name]" placeholder="名字" required/>
+      </div>
+
+      <div class="am-form-group">
+        <label for="doc-vld-name-2-1">位置：</label>
+        <input type="text" id="doc-vld-name-2-1" minlength="1"  value="<%=@lab.position%>" ata-foolish-msg="输入名字" name="lab[position]" placeholder="位置" required/>
+      </div>
+
+
+
+
+      <div class="am-form-group">
+        <label for="doc-vld-ta-2-1">其他信息：</label>
+        <textarea style="height: 167px" id="doc-vld-ta-2-1"  name="lab[info]" minlength="10" maxlength="100">
+
+<%=@lab.info%>
+
+        </textarea>
+      </div>
+
+      <button class="am-btn am-btn-secondary" type="submit">提交</button>
+    </fieldset>
+  </form>
+
+
+
+</div>
+
+
+

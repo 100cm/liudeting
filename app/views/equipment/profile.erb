@@ -1,0 +1,68 @@
+
+<div class="admin-content" >
+
+
+
+  <div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>设备管理</small></div>
+  </div>
+  <div class="am-form" id="doc-vld-msg" style="max-width: 1100px;margin: 0px auto;">
+    <fieldset>
+
+      <div class="am-form-group">
+
+      <img  style="width: 200px;height: 200px" src="<%=@equipment.avatar%>">
+
+
+
+    </div>
+      <div class="am-form-group">
+
+<label>设备名字:</label>
+
+        <p> <%=@equipment.equipment_name %></p>
+
+
+
+      </div>
+      <div class="am-form-group">
+
+        <label>设备价值:</label>
+
+        <p> <%=@equipment.price %></p>
+
+      </div>
+
+      <div class="am-form-group">
+
+        <label>设备损坏程度:</label>
+
+        <p> <%if @equipment.is_damaged==false %>
+              完好<%else%>
+          已损坏
+          <%end%>
+              </p>
+
+      </div>
+
+
+
+      <div class="am-form-group">
+
+        <label>设备级别:</label>
+
+        <p> <%=@equipment.level %></p>
+
+      </div>
+
+      <div class="am-form-group">
+
+        <label>设备信息:</label>
+
+        <p> <%=@equipment.equipment_info %></p>
+
+      </div>
+        </fieldset>
+      </div>
+
+</div>

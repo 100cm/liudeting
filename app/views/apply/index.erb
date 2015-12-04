@@ -1,0 +1,118 @@
+<script src="/assets/amazeui.min.js"></script>
+<div class="admin-content">
+
+
+  <div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>设备管理</small></div>
+  </div>
+
+
+  <div class="am-g">
+    <div class="am-u-md-6 am-cf">
+      <div class="am-fl am-cf">
+        <div class="am-btn-toolbar am-fl">
+          <div class="am-btn-group am-btn-group-xs">
+            <a href="/equipment/new" type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</a>
+
+            <!--<button type="button" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>-->
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="am-u-md-3 am-cf">
+      <div class="am-fr">
+        <div class="am-input-group am-input-group-sm">
+          <input type="text" class="am-form-field">
+                <span class="am-input-group-btn">
+                  <button class="am-btn am-btn-default" type="button">搜索</button>
+                </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="am-g">
+    <div class="am-u-sm-12">
+      <form class="am-form">
+        <table class="am-table am-table-striped am-table-hover table-main">
+          <thead>
+          <tr>
+            <th class="table-check"><input type="checkbox" /></th><th class="table-id">ID</th><th class="table-title">设备名</th><th class="table-type">价值</th><th class="table-author">申请人</th><th class="table-date">入库日期</th>
+            <th class="table-author">完好状态</th>
+            <th class="table-author">申请状态</th>
+            <th class="table-set">操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @applies.each do |a| %>
+          <%@equipment=Equipment.find_by_id(a.equip_id) %>
+              <%@user=User.find_by_id (a.user_id)%>
+              <tr>
+                <td><input id="<%=a.id %>" type="checkbox" /></td>
+                <td ><%=a.id %></td>
+                <td><a href="#"><%=@equipment.equipment_name %>(<%=@equipment.count %>)</a></td>
+                <td><%=@equipment.price  %></td>
+                <td><%=@user.username %></td>
+                <td><% @format="%Y-%m-%d %H:%M:%S" %><%=a.created_at.localtime.strftime(@format) %></td>
+                <td><%if @equipment.is_damaged==true %>
+
+                      损坏
+                  <%else%>
+                      完好
+                  <%end%></td>
+                <td><%if a.is_success==true  %>
+
+                     申请成功
+                      <%end%>
+                  <% if a.is_failed==true%>
+                     申请失败
+
+                          <%else %>
+
+                      申请中
+                  <%end%></td>
+
+                <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <%= link_to content_tag(:span,  "同意", :class=>'am-icon-pencil-square-o'),
+                                  {:controller => "apply", :action => "agree_apply", :id => @equipment.id,:user_id =>@user.id} ,
+                                  :class => 'am-btn am-btn-default am-btn-xs am-text-secondary',
+                                  :style => 'background:white',
+                                  :type =>'button',
+                                  :data=>{:confrim=>"确认？"}
+                      %>
+
+                      <%= link_to content_tag(:span,  "拒绝", :class=>'am-icon-pencil-square-o'),
+                                  {:controller => "apply", :action => "decline_apply", :id => a.id} ,
+                                  :class => 'am-btn am-btn-default am-btn-xs am-text-secondary',
+                                  :style => 'background:white',
+                                  :type =>'button',
+                             :data=>{:confrim=>"确认拒绝？"}
+                      %>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+          <% end %>
+
+
+          </tbody>
+        </table>
+        <div class="am-fr">
+
+        </div>
+
+
+        <hr />
+        <p>注：只有最高管理员才可以进行删除操作</p>
+      </form>
+    </div>
+
+  </div>
+
+
+
+</div>
