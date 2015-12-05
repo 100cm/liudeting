@@ -25,9 +25,7 @@
       <div class="am-fr">
         <div class="am-input-group am-input-group-sm">
           <input type="text" class="am-form-field">
-                <span class="am-input-group-btn">
-                  <button class="am-btn am-btn-default" type="button">搜索</button>
-                </span>
+
         </div>
       </div>
     </div>
@@ -77,6 +75,7 @@
                 <td>
                   <div class="am-btn-toolbar">
                     <div class="am-btn-group am-btn-group-xs">
+                      <% if current_user.admin?%>
                       <%= link_to content_tag(:span,  "同意", :class=>'am-icon-pencil-square-o'),
                                   {:controller => "apply", :action => "agree_apply", :id => @equipment.id,:user_id =>@user.id} ,
                                   :class => 'am-btn am-btn-default am-btn-xs am-text-secondary',
@@ -92,6 +91,8 @@
                                   :type =>'button',
                              :data=>{:confrim=>"确认拒绝？"}
                       %>
+
+                          <%end%>
                     </div>
                   </div>
                 </td>

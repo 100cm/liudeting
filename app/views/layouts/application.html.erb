@@ -31,13 +31,12 @@
           <span class="am-icon-users"></span> <%= current_user.username %> <span class="am-icon-caret-down"></span>
         </a>
         <ul class="am-dropdown-content">
-          <li><a href="#"><span class="am-icon-user"></span> 资料</a></li>
+
 
 
           <li><%= link_to content_tag(:span,  "退出", :class=>'am-icon-power-off'),destroy_user_session_path,:method => :delete,:class => "btn btn-block btn-default" %></li>
         </ul>
       </li>
-      <li><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
     </ul>
   </div>
 
@@ -55,11 +54,16 @@
       <li class="admin-parent">
         <a class="am-cf  <% if params[:controller] != "equipment" %> am-collapsed<%end %>" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-file"></span> 器材管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
         <ul class="am-list am-collapse admin-sidebar-sub <% if params[:controller] == "equipment" %> am-in<%end %>" id="collapse-nav">
-          <li><a href="/equipment/new" class="am-cf"><span class="am-icon-check"></span> 器材入库<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+
+         <%if current_user.admin? %> <li><a href="/equipment/new" class="am-cf"><span class="am-icon-check"></span> 器材入库<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+          <%end%>
           <li><a href="/equipment/show"><span class="am-icon-tasks"></span> 查询全部器材</a></li>
           <li><a href="/equipment/apply"><span class="am-icon-puzzle-piece"></span> 器材借取</a></li>
+          <%if current_user.admin?%>
+
           <li><a href="/equipment/revert"><span class="am-icon-th"></span> 器材归还<span class="am-badge am-badge-secondary am-margin-right am-fr">24</span></a></li>
           <li><a href="/equipment/repair"><span class="am-icon-calendar"></span> 器材维修</a></li>
+          <%end%>
           <!--<li><a href="admin-404.html"><span class="am-icon-bug"></span> 总体日志</a></li>-->
         </ul>
       </li>
@@ -67,15 +71,21 @@
       <li class="admin-parent">
         <a class="am-cf" data-am-collapse="{target: '#collapse-nav-2'}"><span class="am-icon-table"></span> 实验室管理<span class="am-icon-angle-right am-fr am-margin-right"></span></a>
         <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav-2">
+          <%if current_user.admin?%>
           <li><a href="/lab/new" class="am-cf"><span class="am-icon-check"></span> 实验室新增<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
-          <li><a href="/lab/show"><span class="am-icon-tasks"></span> 实验室查看</a></li>
+
+          <%end%> <li><a href="/lab/show"><span class="am-icon-tasks"></span> 实验室查看</a></li>
 
           <!--<li><a href="admin-404.html"><span class="am-icon-bug"></span> 总体日志</a></li>-->
         </ul>
       </li>
-
+      <%if current_user.admin?%>
       <li><a href="/manage/apply"><span class="am-icon-pencil-square-o"></span> 申请管理</a></li>
+      <%end%>
       <li><a href="/user/my_apply"><span class="am-icon-pencil-square-o"></span> 我的申请</a></li>
+
+      <li><a href="/user/show"><span class="am-icon-sign-out"></span> 用户管理</a></li>
+
       <li><a href="/users/edit"><span class="am-icon-sign-out"></span> 修改资料</a></li>
     </ul>
 

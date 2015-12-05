@@ -23,8 +23,30 @@ redirect_to '/user/my_apply'
   end
 
 
-  def edit
+  def show
 
+@users= User.all.page params[:page]
+
+  end
+
+  def add_admin
+
+@user=User.find params[:id]
+
+    @user.update(is_admin: true)
+
+
+redirect_to '/user/show'
+
+
+  end
+
+  def cancel_admin
+
+    @user=User.find params[:id]
+
+    @user.update(is_admin: false)
+    redirect_to '/user/show'
 
 
   end

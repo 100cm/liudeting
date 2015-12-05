@@ -9,12 +9,21 @@ Rails.application.routes.draw do
 
   get 'user/cancel_apply'=>'user#cancel_apply'
 
-  get 'user/:id/edit' =>'user#edit'
+
+
+
+  get 'user/show' =>'user#show'
+  get '/user/add_admin' =>'user#add_admin'
+  get '/user/cancel_admin' => 'user#cancel_admin'
+
 
   get  'equipment/profile/:id' => 'equipment#profile'
   get '/equipment/new' => 'equipment#new'
   post '/equipment/create' => 'equipment#create'
   get '/equipment/show' => 'equipment#show'
+
+
+
 
 
 

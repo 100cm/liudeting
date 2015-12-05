@@ -10,5 +10,10 @@ class User < ActiveRecord::Base
     is_admin
   end
 
+  def super?
+
+    is_super
+  end
+
 
 end
